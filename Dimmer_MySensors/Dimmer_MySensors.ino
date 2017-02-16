@@ -7,12 +7,12 @@
 #define MY_NODE_ID 4  // Sets a static id for a node
 
 #define SN "Dimmer"
-#define SV "1.0"
+#define SV "2.0"
 
 #include <MySensors.h>  
-#include "Dimmer.h"  
-#include "ControllerMonitor.h"
-#include "timeout.h"
+#include <Dimmer.h>
+#include <ControllerMonitor.h>
+#include <timeout.h>
 
 #include <SPI.h>
 
@@ -61,24 +61,24 @@ void presentation()
   present(CHILD_ID_DIM_1, S_DIMMER);  // present as dimmer
   present(CHILD_ID_DIM_2, S_DIMMER);  // present as dimmer
 
-
+  
  // load dimming time
-  if (dimPeriod = loadState(CHILD_ID_DIM_1) == 0xFF)
+  if ( (dimPeriod = loadState(CHILD_ID_DIM_1)) == 0xFF)
     dimPeriod = DIMMER_DEFAULT_DIMMING;
   saveState(CHILD_ID_DIM_1, dimPeriod);
   dimmer[0].setFadeIn(dimPeriod);
   
-  if (dimPeriod = loadState(CHILD_ID_DIM_1 + 2) == 0xFF)
+  if ( (dimPeriod = loadState(CHILD_ID_DIM_1 + 2)) == 0xFF)
     dimPeriod = DIMMER_DEFAULT_DIMMING;
   saveState(CHILD_ID_DIM_1 + 2, dimPeriod);
   dimmer[0].setFadeOut(dimPeriod);
   
-  if (dimPeriod = loadState(CHILD_ID_DIM_2) == 0xFF)
+  if ((dimPeriod = loadState(CHILD_ID_DIM_2)) == 0xFF)
     dimPeriod = DIMMER_DEFAULT_DIMMING;
   saveState(CHILD_ID_DIM_2, dimPeriod);
   dimmer[1].setFadeIn(dimPeriod);
-
-  if (dimPeriod = loadState(CHILD_ID_DIM_2 + 2) == 0xFF)
+  
+  if ((dimPeriod = loadState(CHILD_ID_DIM_2 + 2)) == 0xFF)
     dimPeriod = DIMMER_DEFAULT_DIMMING;
   saveState(CHILD_ID_DIM_2 + 2, dimPeriod);
   dimmer[1].setFadeOut(dimPeriod);

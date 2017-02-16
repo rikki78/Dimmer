@@ -2,17 +2,17 @@
 #define MY_REPEATER_FEATURE
 
 #define MY_RADIO_NRF24
-// #define MY_DEBUG    // Enables debug messages in the serial log
+//#define MY_DEBUG    // Enables debug messages in the serial log
 #define MY_BAUD_RATE  115200 // Sets the serial baud rate for console and serial gateway
 #define MY_NODE_ID 6  // Sets a static id for a node
 
 #define SN "Dimmer"
-#define SV "1.1"
+#define SV "2.0"
 
 #include <MySensors.h>  
-#include "Dimmer.h"  
-#include "ControllerMonitor.h"
-#include "timeout.h"
+#include <Dimmer.h>
+#include <ControllerMonitor.h>
+#include <timeout.h>
 
 #include <SPI.h>
 #include <DHT.h>  
@@ -81,22 +81,22 @@ void setup()
   pinMode(MOTION_INPUT, INPUT);      // sets the motion sensor digital pin as input
 
  // load dimming time
-  if (dimPeriod = loadState(CHILD_ID_DIM_1) == 0xFF)
+  if ( (dimPeriod = loadState(CHILD_ID_DIM_1)) == 0xFF)
     dimPeriod = DIMMER_DEFAULT_DIMMING;
   saveState(CHILD_ID_DIM_1, dimPeriod);
   dimmer[0].setFadeIn(dimPeriod);
   
-  if (dimPeriod = loadState(CHILD_ID_DIM_1 + 2) == 0xFF)
+  if ( (dimPeriod = loadState(CHILD_ID_DIM_1 + 2)) == 0xFF)
     dimPeriod = DIMMER_DEFAULT_DIMMING;
   saveState(CHILD_ID_DIM_1 + 2, dimPeriod);
   dimmer[0].setFadeOut(dimPeriod);
   
-  if (dimPeriod = loadState(CHILD_ID_DIM_2) == 0xFF)
+  if ((dimPeriod = loadState(CHILD_ID_DIM_2)) == 0xFF)
     dimPeriod = DIMMER_DEFAULT_DIMMING;
   saveState(CHILD_ID_DIM_2, dimPeriod);
   dimmer[1].setFadeIn(dimPeriod);
-
-  if (dimPeriod = loadState(CHILD_ID_DIM_2 + 2) == 0xFF)
+  
+  if ((dimPeriod = loadState(CHILD_ID_DIM_2 + 2)) == 0xFF)
     dimPeriod = DIMMER_DEFAULT_DIMMING;
   saveState(CHILD_ID_DIM_2 + 2, dimPeriod);
   dimmer[1].setFadeOut(dimPeriod);
@@ -149,9 +149,13 @@ void receive(const MyMessage &message)
       // Clip incoming level to valid range of 0 to 100
       dimValue = dimValue > 100 ? 100 : dimValue;
       dimValue = dimValue < 0   ? 0   : dimValue; 
-
+      /* Serial.print("Saving ");
+      Serial.print(dimValue, DEC);
+      Serial.print(" in ");
+      Serial.println(CHILD_ID_DIM_1 + index); */
       dimmer[index].setFadeIn(dimValue);
       saveState(CHILD_ID_DIM_1 + index, dimValue);
+      
       break;
 
     case V_VAR2:
@@ -160,7 +164,11 @@ void receive(const MyMessage &message)
       // Clip incoming level to valid range of 0 to 100
       dimValue = dimValue > 100 ? 100 : dimValue;
       dimValue = dimValue < 0   ? 0   : dimValue; 
-
+/* 
+      Serial.print("Saving ");
+      Serial.print(dimValue, DEC);
+      Serial.print(" in ");
+      Serial.println(CHILD_ID_DIM_1 + index + 2); */
       dimmer[index].setFadeOut(dimValue);
       saveState(CHILD_ID_DIM_1 + index + 2, dimValue);
       break;
