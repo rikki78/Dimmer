@@ -107,7 +107,7 @@ uint8_t request_values(uint8_t set)
 {
   // request the current values
   request(CHILD_ID_DIM_1, V_DIMMER);  
-  request(CHILD_ID_DIM_2, V_DIMMER);  
+  // request(CHILD_ID_DIM_2, V_DIMMER);  
   Serial.println("Request values");
 }
 
